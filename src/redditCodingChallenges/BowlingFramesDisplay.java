@@ -44,58 +44,76 @@ public class BowlingFramesDisplay {
 			}
 			index++;
 		}
-		if (scores[index] == 10) {
-			display[9] = "X";
-			if (scores[++index] == 10) {
-				display[9] += "X";
-				if (scores[++index] == 10) {
-					display[9] += "X";
-				} else if (scores[index] == 0) {
-					display[9] += "-";
+		shot = 0;
+		while (frame == 9) {
+			int curShot = scores[index];
+			switch(shot) {
+			case 0:
+				prevShot = curShot;
+				if (prevShot == 10) {
+					display[frame] = "X";
+					shot++;
+				} else if (prevShot == 0) {
+					display[frame] = "-";
+					shot++;
 				} else {
-					display[9] += scores[index];
+					display[frame] = "" + prevShot;
+					shot++;
 				}
-			} else if (scores[index] == 0) {
-				display[9] += "-";
-				if (scores[++index] == 0) {
-					display[9] += "-";
-				} else if (scores[index] == 10) {
-					display[9] += "/";
+				break;
+			case 1:
+				if (prevShot == 10) {
+					prevShot = curShot;
+					if (curShot == 10) {
+						display[frame] += "X";
+						shot++;
+					} else if (curShot == 0) {
+						display[frame] += "-";
+						shot++;
+					} else {
+						display[frame] += curShot;
+						shot++;
+					}
 				} else {
-					display[9] += scores[index];
+					if (prevShot + curShot == 10) {
+						display[frame] += "/";
+						shot++;
+					} else if (curShot == 0) {
+						display[frame] += "-";
+						frame++;
+					} else {
+						display[frame] += curShot;
+						frame++;
+					}
 				}
-			} else {
-				prevShot = scores[index];
-				display[9] += prevShot;
-				if (scores[++index] == 0) {
-					display[9] += "-";
-				} else if (scores[index] + prevShot == 10) {
-					display[9] += "/";
+				break;
+			case 2:
+				if (prevShot == 10) {
+					if (curShot == 0) {
+						display[frame] += "-";
+						frame++;
+					} else if (curShot == 10) {
+						display[frame] += "X";
+						frame++;
+					} else {
+						display[frame] += curShot;
+						frame++;
+					}
 				} else {
-					display[9] += scores[index];
+					if (prevShot + curShot == 10) {
+						display[frame] += "/";
+						frame++;
+					} else if (curShot == 0) {
+						display[frame] += "-";
+						frame++;
+					} else {
+						display[frame] += curShot;
+						frame++;
+					}
 				}
+				break;
 			}
-		} else {
-			prevShot = scores[index];
-			if (scores[index] == 0) {
-				display[9] = "-";
-			} else {
-				display[9] = "" + prevShot;
-			}
-			if (scores[++index] + prevShot == 10) {
-				display[9] += "/";
-				if (scores[++index] == 10) {
-					display[9] += "X";
-				} else if (scores[index] == 0) {
-					display[9] += "-";
-				} else {
-					display[9] += scores[index];
-				}
-			} else if (scores[index] == 0) {
-				display[9] += "-";
-			} else {
-				display[9] += scores[index];
-			}
+			index++;
 		}
 		display(display);
 		
